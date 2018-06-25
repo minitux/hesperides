@@ -75,7 +75,87 @@ public class PropertyOutput implements Comparable<PropertyOutput>{
         return propertyOutput;
     }
     @Override
-    public int compareTo(@NotNull PropertyOutput o)  {
+    public int compareTo(@NotNull PropertyOutput o) {
         return this.name.compareTo(o.name);
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        } else if (!(o instanceof PropertyOutput)) {
+            return false;
+        } else {
+            PropertyOutput other;
+            label76:
+            {
+                other = (PropertyOutput) o;
+                Object this$name = this.getName();
+                Object other$name = other.getName();
+                if (this$name == null) {
+                    if (other$name == null) {
+                        break label76;
+                    }
+                } else if (this$name.equals(other$name)) {
+                    break label76;
+                }
+
+                return false;
+            }
+
+            if (this.isRequired() != other.isRequired()) {
+                return false;
+            } else {
+                String this$comment = this.getComment();
+                String other$comment = (other.getComment() == null) ? "" : other.getComment();
+                if (this$comment == null) {
+                    if (other$comment != null) {
+                        return false;
+                    }
+                } else if (!this$comment.equals(other$comment)) {
+                    return false;
+                }
+
+                Object this$defaultValue = this.getDefaultValue();
+                Object other$defaultValue = other.getDefaultValue();
+                if (this$defaultValue == null) {
+                    if (other$defaultValue != null) {
+                        return false;
+                    }
+                } else if (!this$defaultValue.equals(other$defaultValue)) {
+                    return false;
+                }
+
+                label54:
+                {
+                    Object this$pattern = this.getPattern();
+                    Object other$pattern = other.getPattern();
+                    if (this$pattern == null) {
+                        if (other$pattern == null) {
+                            break label54;
+                        }
+                    } else if (this$pattern.equals(other$pattern)) {
+                        break label54;
+                    }
+
+                    return false;
+                }
+
+                if (this.isPassword() != other.isPassword()) {
+                    return false;
+                } else {
+                    Object this$properties = this.getProperties();
+                    Object other$properties = other.getProperties();
+                    if (this$properties == null) {
+                        if (other$properties != null) {
+                            return false;
+                        }
+                    } else if (!this$properties.equals(other$properties)) {
+                        return false;
+                    }
+
+                    return true;
+                }
+            }
+        }
     }
 }
