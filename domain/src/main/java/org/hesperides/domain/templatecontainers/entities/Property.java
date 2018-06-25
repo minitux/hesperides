@@ -76,6 +76,8 @@ public class Property extends AbstractProperty {
      * - @pattern annotation_value (avec ou sans "")
      * - @password
      *
+     * Il est possible de remplir un commentaire sans mettre l'annotation @comment, à condition qu'elle soit la première.
+     * De plus, par ce biais, un commentaire peut être composé d'espaces
      * @param propertyDefinition
      * @return
      */
@@ -112,6 +114,9 @@ public class Property extends AbstractProperty {
                         isPassword = true;
                     }
                 }
+            }
+            else if(propertyAttributes.length >1){
+                comment = propertyAttributes[ANNOTATIONS_INDEX];
             }
             property = new Property(name, isRequired, comment, defaultValue, pattern, isPassword);
         }
