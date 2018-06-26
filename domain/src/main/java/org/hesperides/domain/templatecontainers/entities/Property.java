@@ -4,6 +4,8 @@ import lombok.Value;
 import org.hesperides.domain.templatecontainers.exceptions.RequiredPropertyCannotHaveDefaultValueException;
 import org.springframework.util.StringUtils;
 
+import java.util.Arrays;
+
 @Value
 public class Property extends AbstractProperty {
 
@@ -75,9 +77,12 @@ public class Property extends AbstractProperty {
      * - @default annotation_value (avec ou sans "")
      * - @pattern annotation_value (avec ou sans "")
      * - @password
-     *
+     * <p>
      * Il est possible de remplir un commentaire sans mettre l'annotation @comment, à condition qu'elle soit la première.
      * De plus, par ce biais, un commentaire peut être composé d'espaces
+     *
+     * Une proprité ne peut avoir plusieurs fois la même annotation, sinon l'erreur ModelAnnotationException est levée
+     * TODO ModelAnnotationException
      * @param propertyDefinition
      * @return
      */
@@ -93,16 +98,37 @@ public class Property extends AbstractProperty {
             String pattern = "";
             boolean isPassword = false;
 
-            if (propertyAttributes.length > 1 && propertyAttributes[1].contains(ANNOTATION_PREFIX)) {
-                String[] annotations = propertyAttributes[ANNOTATIONS_INDEX].split(ANNOTATION_PREFIX);
+            if (propertyAttributes.length > 1) {
+                String[] annotedProperties = propertyAttributes[ANNOTATIONS_INDEX].split(ANNOTATION_PREFIX);
+                //Le split renvoit "" lorsqu'une propriété commence par une annotation avec @ après le pipe
+                if(annotedProperties[0].equals("")){
+                    annotedProperties = Arrays.copyOfRange(annotedProperties,1,annotedProperties.length);
+                }
+                int index = 0;
+                boolean isFirstWordAnAnnotation = false;
+                //Si il y a une chaine de caratère après le pipe, et sans annotations, c'est un commentaire
+                for (Annotation a : Annotation.values()) {
+                    if (annotedProperties[index].toLowerCase().startsWith(a.getName().toLowerCase())) {
+                        isFirstWordAnAnnotation = true;
+                    }
+                }
 
-                for (String annotation : annotations) {
+                if (!isFirstWordAnAnnotation) {
+                    comment = extractPropertyAnnotationValue(annotedProperties[index]);
+                    index++;
+                }
 
+                for (int i = index; i < annotedProperties.length ; ++i) {
+                    String annotation = annotedProperties[i];
                     if (annotation.toLowerCase().startsWith(Annotation.IS_REQUIRED.getName().toLowerCase())) {
                         isRequired = true;
 
                     } else if (annotation.toLowerCase().startsWith(Annotation.COMMENT.getName().toLowerCase())) {
-                        comment = extractPropertyAnnotationValue(annotation);
+                        if (isFirstWordAnAnnotation) {
+                            //TODO lever une exception ModelAnnotationException
+                        }
+                        else
+                            comment = extractPropertyAnnotationValue(annotation);
 
                     } else if (annotation.toLowerCase().startsWith(Annotation.DEFAULT_VALUE.getName().toLowerCase())) {
                         defaultValue = extractPropertyAnnotationValue(annotation);
@@ -113,10 +139,8 @@ public class Property extends AbstractProperty {
                     } else if (annotation.toLowerCase().startsWith(Annotation.IS_PASSWORD.getName().toLowerCase())) {
                         isPassword = true;
                     }
+
                 }
-            }
-            else if(propertyAttributes.length >1){
-                comment = propertyAttributes[ANNOTATIONS_INDEX];
             }
             property = new Property(name, isRequired, comment, defaultValue, pattern, isPassword);
         }
