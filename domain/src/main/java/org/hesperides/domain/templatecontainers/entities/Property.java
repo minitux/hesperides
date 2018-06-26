@@ -124,7 +124,7 @@ public class Property extends AbstractProperty {
                         isRequired = true;
 
                     } else if (annotation.toLowerCase().startsWith(Annotation.COMMENT.getName().toLowerCase())) {
-                        if (isFirstWordAnAnnotation) {
+                        if (!isFirstWordAnAnnotation) {
                             //TODO lever une exception ModelAnnotationException
                         }
                         else
