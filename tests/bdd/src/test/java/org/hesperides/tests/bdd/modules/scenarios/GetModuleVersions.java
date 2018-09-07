@@ -25,7 +25,7 @@ public class GetModuleVersions extends CucumberSpringBean implements En {
     public GetModuleVersions() {
 
         Given("^an existing module with multiple versions$", () -> {
-            for (int i = 0; i < 6; i++) {
+            for (int i =     0; i < 6; i++) {
                 ModuleIO moduleInput = ModuleSamples.getModuleInputWithNameAndVersion("test", "1.0." + i);
                 moduleContext.createModule(moduleInput);
             }

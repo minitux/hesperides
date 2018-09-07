@@ -119,3 +119,14 @@ Feature: technos related features
     Given an existing techno
     When trying to create a template in this techno that has a property that is required and with a default value
     Then the creation of the techno template that has a property that is required and with a default value is rejected
+
+  Scenario: get the event list for a techno
+    Given an existing techno
+    When retrieving the techno's events array
+    Then the events array of this techno is retrieved
+
+  Scenario: Update a techno and get its events list
+    Given an existing techno
+    And adding a template to this techno
+    When retrieving the techno's events array
+    Then the number of events is 2

@@ -35,6 +35,14 @@ public class TechnoContext extends CucumberSpringBean implements En {
         return String.format("/templates/packages/%s/%s/%s", technoKey.getName(), technoKey.getVersion(), technoKey.getVersionType());
     }
 
+    public String getTechnoLegacyKey(){
+        return String.format("/template_package-%s-%s-%s", technoKey.getName(),technoKey.getVersionType(),technoKey.getVersionType().getMinimizedForm());
+    }
+
+    public String getTechnoLegacyKey(TemplateContainer.Key technoKey){
+        return String.format("/template_package-%s-%s-%s", technoKey.getName(),technoKey.getVersionType(),technoKey.getVersionType().getMinimizedForm());
+    }
+
     public String getTemplatesURI() {
         return getTechnoURI() + "/templates";
     }
