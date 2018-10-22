@@ -31,7 +31,7 @@ public class CreateAWorkshopProperty extends CucumberSpringBean implements En {
         });
 
         Then("^the workshop property is successfully created$", () -> {
-            assertEquals(HttpStatus.OK, response.getStatusCode());
+            assertEquals(HttpStatus.CREATED, response.getStatusCode());
             WorkshopPropertyOutput actualOutput = response.getBody();
             WorkshopPropertyOutput expectedOutput = WorkshopPropertySamples.getWorkshopPropertyOutputWithDefaultValues();
             WorkshopPropertyAssertions.assertWorkshopProperty(expectedOutput, actualOutput);

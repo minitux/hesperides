@@ -28,7 +28,7 @@ public class UpdateAWorkshopProperty extends CucumberSpringBean implements En {
         });
 
         Then("^the workshop property is successfully updated", () -> {
-            assertEquals(HttpStatus.OK, response.getStatusCode());
+            assertEquals(HttpStatus.CREATED, response.getStatusCode());
             WorkshopPropertyOutput actualOutput = response.getBody();
             WorkshopPropertyOutput expectedOutput = WorkshopPropertySamples.getWorkshopPropertyOutputWithValue("foo");
             WorkshopPropertyAssertions.assertWorkshopProperty(expectedOutput, actualOutput);
